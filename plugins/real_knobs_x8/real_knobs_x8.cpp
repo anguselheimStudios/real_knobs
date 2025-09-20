@@ -215,7 +215,6 @@ protected:
 				if (chan == (params[k].control_channel - 1)
 				&& cc_num == (params[k].control_number)) {
 					
-					unused = false;
 					// Get incoming value
 					uint8_t value_in = midiEvents[i].data[2] & 0x7f;
 					struct MidiEvent event_out;

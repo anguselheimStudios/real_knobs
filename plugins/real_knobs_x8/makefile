@@ -20,7 +20,7 @@ FILES_DSP = \
 # --------------------------------------------------------------
 # Do some magic
 
-include ../DPF/Makefile.plugins.mk
+include ../../DPF/Makefile.plugins.mk
 
 # --------------------------------------------------------------
 # Enable all possible plugin types
