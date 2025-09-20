@@ -1,0 +1,22 @@
+#ifndef DISTRHO_PLUGIN_INFO_H_INCLUDED
+#define DISTRHO_PLUGIN_INFO_H_INCLUDED
+
+#define DISTRHO_PLUGIN_BRAND   "Anguselheim Studios"
+#define DISTRHO_PLUGIN_NAME    "real_knobs"
+#define DISTRHO_PLUGIN_URI     "https://AnguselheimStudios.com/plugins/real_knobs"
+#define DISTRHO_PLUGIN_CLAP_ID "TBD"
+#define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:MIDIPlugin"
+
+#define DISTRHO_PLUGIN_BRAND_ID  ANGO
+#define DISTRHO_PLUGIN_UNIQUE_ID Knob
+
+#define DISTRHO_PLUGIN_HAS_UI           0
+#define DISTRHO_PLUGIN_IS_RT_SAFE       1
+#define DISTRHO_PLUGIN_IS_SYNTH         0
+#define DISTRHO_PLUGIN_NUM_INPUTS       0
+#define DISTRHO_PLUGIN_NUM_OUTPUTS      0
+#define DISTRHO_PLUGIN_WANT_MIDI_INPUT  1
+#define DISTRHO_PLUGIN_WANT_MIDI_OUTPUT 1
+#define DISTRHO_UI_FILE_BROWSER         0
+
+#endif // DISTRHO_PLUGIN_INFO_H_INCLUDED
