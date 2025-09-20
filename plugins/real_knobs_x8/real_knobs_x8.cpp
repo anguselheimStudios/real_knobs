@@ -35,8 +35,6 @@ struct knob{
 	uint8_t control_channel = 1;
 	uint8_t control_number = 7;
 	int16_t control_value = 0;
-//	uint8_t control_sensitivity = 1;
-
 };
 
 int8_t relative_to_signed(int8_t input_value) {
@@ -107,7 +105,7 @@ protected:
 		temp_knob.control_channel = 1;
 		temp_knob.control_number = 102 + index;
 		temp_knob.control_value = 1;
-//		temp_knob.control_sensitivity = 1;
+
 		params[active_knob] = temp_knob;
 		
 		
@@ -133,13 +131,7 @@ protected:
 	            parameter.ranges.max = 127;
 	            parameter.ranges.def = 0;
 	            break;
-/*			case 3: 
-				parameter.name = ("Sensitivity" + String(active_knob));
-				parameter.hints |= kParameterIsInteger;
-	            parameter.ranges.min = 1;
-	            parameter.ranges.max = 10;
-	            parameter.ranges.def = 1;
-	            break;*/
+
 		}
 			
 	parameter.symbol = parameter.name;
@@ -163,9 +155,6 @@ protected:
 			case 2:
 				return params[active_knob].control_value;
 				break;
-//			case 3:
-//				return params[active_knob].control_sensitivity;
-//				break;
 			}
 			return -1;			
 	}
@@ -188,9 +177,6 @@ protected:
 			case 2:
 				params[active_knob].control_value = value;
 				break;
-//			case 3:
-//				params[active_knob].control_sensitivity = value;
-//				break;
 			}					
 	}
 
