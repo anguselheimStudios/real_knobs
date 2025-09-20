@@ -35,7 +35,7 @@ struct knob{
 	uint8_t control_channel = 1;
 	uint8_t control_number = 7;
 	int16_t control_value = 0;
-	uint8_t control_sensitivity = 1;
+//	uint8_t control_sensitivity = 1;
 
 };
 
@@ -55,7 +55,7 @@ int8_t relative_to_signed(int8_t input_value) {
 class real_knobs : public Plugin {
 public:
     real_knobs()
-        : Plugin(4* NUM_KNOBS, 0, 0) 
+        : Plugin(3 * NUM_KNOBS, 0, 0) 
 			
 			{
 			}
@@ -107,7 +107,7 @@ protected:
 		temp_knob.control_channel = 1;
 		temp_knob.control_number = 102 + index;
 		temp_knob.control_value = 1;
-		temp_knob.control_sensitivity = 1;
+//		temp_knob.control_sensitivity = 1;
 		params[active_knob] = temp_knob;
 		
 		
@@ -133,14 +133,15 @@ protected:
 	            parameter.ranges.max = 127;
 	            parameter.ranges.def = 0;
 	            break;
-			case 3: 
+/*			case 3: 
 				parameter.name = ("Sensitivity" + String(active_knob));
 				parameter.hints |= kParameterIsInteger;
 	            parameter.ranges.min = 1;
 	            parameter.ranges.max = 10;
 	            parameter.ranges.def = 1;
-	            break;
-			}
+	            break;*/
+		}
+			
 	parameter.symbol = parameter.name;
 	}
 		
@@ -162,9 +163,9 @@ protected:
 			case 2:
 				return params[active_knob].control_value;
 				break;
-			case 3:
-				return params[active_knob].control_sensitivity;
-				break;
+//			case 3:
+//				return params[active_knob].control_sensitivity;
+//				break;
 			}
 			return -1;			
 	}
@@ -187,9 +188,9 @@ protected:
 			case 2:
 				params[active_knob].control_value = value;
 				break;
-			case 3:
-				params[active_knob].control_sensitivity = value;
-				break;
+//			case 3:
+//				params[active_knob].control_sensitivity = value;
+//				break;
 			}					
 	}
 
@@ -209,15 +210,16 @@ protected:
 			
 			uint8_t chan = midiEvents[i].data[0] & 0x0F;
 			uint8_t cc_num = midiEvents[i].data[1] & 0x7f;
-			
+			bool unused = true;
 			for (uint8_t k = 0; k < NUM_KNOBS; k++){
 				
 				if (chan == (params[k].control_channel - 1)
 				&& cc_num == (params[k].control_number)) {
 					
+					unused = false;
 					// Get incoming value
 					uint8_t value_in = midiEvents[i].data[2] & 0x7f;
-					struct MidiEvent event_out;
+
 					
 					// apply it to the cc value
 					params[k].control_value = params[k].control_value + relative_to_signed(value_in);
@@ -229,9 +231,9 @@ protected:
 					else if (params[k].control_value < 0) {
 						params[k].control_value = 0;
 					}
-
 					
 					// Pack it up and send it out
+					struct MidiEvent event_out;
 					event_out.frame = midiEvents[i].frame;
 					event_out.size = 3;
 					event_out.data[0] = 0xB0 | (params[k].control_channel - 1);
@@ -243,8 +245,9 @@ protected:
 				}
 				
 				// pass it through if it didn't get filtered
-	            writeMidiEvent(midiEvents[i]);
-				
+				if (unused){
+					writeMidiEvent(midiEvents[i]);
+				}
 				
 
 			}
