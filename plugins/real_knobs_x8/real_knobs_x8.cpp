@@ -117,7 +117,7 @@ protected:
 	 * of the paramater in the switch statements associated 
 	 * knobs struct.
 	 */
-	knob_param_pair index_to_knob_param_pair(uint32_t index, uint8_t num_knobs = NUM_KNOBS) {
+	knob_param_pair index_to_knob_param_pair(uint32_t index, const uint8_t num_knobs = NUM_KNOBS) const {
 		knob_param_pair result;
 		result.knob_num = index;
 		result.param_num = 0;
@@ -131,15 +131,7 @@ protected:
 	void initParameter(uint32_t index, Parameter& parameter) override {
        
         parameter.hints = kParameterIsAutomatable;
-        /*
-        uint32_t param = 0;
-		uint32_t  active_knob = index; 
-		while (active_knob  >= NUM_KNOBS) {
-			active_knob = active_knob - NUM_KNOBS;
-			param = param + 1;
-		}
-		*/
-		
+
 		knob_param_pair indices = index_to_knob_param_pair(index);
         
         knob temp_knob;
@@ -179,21 +171,18 @@ protected:
 		
 		
     float getParameterValue(uint32_t index) const override {
-       	uint32_t param = 0;
-		uint32_t  active_knob = index; 
-		while (active_knob  >= NUM_KNOBS) {
-			active_knob = active_knob - NUM_KNOBS;
-			param = param + 1;
-		}
-		switch (param){
+		
+		knob_param_pair indices = index_to_knob_param_pair(index);
+
+		switch (indices.param_num){
 			case control_channel:
-				return params[active_knob].control_channel;
+				return params[indices.knob_num].control_channel;
 				break;
 			case control_number:
-				return params[active_knob].control_number;
+				return params[indices.knob_num].control_number;
 				break;
 			case control_value:
-				return params[active_knob].control_value;
+				return params[indices.knob_num].control_value;
 				break;
 			}
 			return -1;			
@@ -201,21 +190,18 @@ protected:
 
 
      void setParameterValue(uint32_t index, float value) override {
-		uint32_t param = 0;
-		uint32_t  active_knob = index; 
-		while (active_knob  >= NUM_KNOBS) {
-			active_knob = active_knob - NUM_KNOBS;
-			param = param + 1;
-		}
-		switch (param){
+
+		knob_param_pair indices = index_to_knob_param_pair(index);
+		
+		switch (indices.param_num){
 			case control_channel:
-				params[active_knob].control_channel = value;
+				params[indices.knob_num].control_channel = value;
 				break;
 			case control_number:
-				params[active_knob].control_number = value;
+				params[indices.knob_num].control_number = value;
 				break;
 			case control_value:
-				params[active_knob].control_value = value;
+				params[indices.knob_num].control_value = value;
 				break;
 			}					
 	}
