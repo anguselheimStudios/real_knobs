@@ -128,6 +128,7 @@ protected:
 		return result;
 	}
 	
+	// initialize the parameters
 	void initParameter(uint32_t index, Parameter& parameter) override {
        
         parameter.hints = kParameterIsAutomatable;
@@ -169,7 +170,7 @@ protected:
 	parameter.symbol = parameter.name;
 	}
 		
-		
+	//Parameter Getter
     float getParameterValue(uint32_t index) const override {
 		
 		knob_param_pair indices = index_to_knob_param_pair(index);
@@ -188,8 +189,8 @@ protected:
 			return -1;			
 	}
 
-
-     void setParameterValue(uint32_t index, float value) override {
+	//Parameter Getter
+    void setParameterValue(uint32_t index, float value) override {
 
 		knob_param_pair indices = index_to_knob_param_pair(index);
 		
@@ -269,7 +270,7 @@ protected:
     // -------------------------------------------------------------------------------------------------------
 
 private:
-
+	// parameters 
 	knob params[NUM_KNOBS];
 	
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(real_knobs_x8)
