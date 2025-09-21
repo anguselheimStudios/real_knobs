@@ -79,6 +79,13 @@ protected:
 		int16_t control_value = 0;
 	};
 	
+	// standard index for param related swithes 
+	enum knob_params {
+		control_channel,
+		control_number,
+		control_value
+	};
+	
 	/* knob_param_pair is used as a return value for 
 	 * index_to_knob_param_pair. 
 	 * 
@@ -110,7 +117,7 @@ protected:
 	 * of the paramater in the switch statements associated 
 	 * knobs struct.
 	 */
-	knob_param_pair index_to_knob_param_pair(uint8_t index, uint8_t num_knobs = NUM_KNOBS) {
+	knob_param_pair index_to_knob_param_pair(uint32_t index, uint8_t num_knobs = NUM_KNOBS) {
 		knob_param_pair result;
 		result.knob_num = index;
 		result.param_num = 0;
@@ -124,38 +131,41 @@ protected:
 	void initParameter(uint32_t index, Parameter& parameter) override {
        
         parameter.hints = kParameterIsAutomatable;
-        
+        /*
         uint32_t param = 0;
 		uint32_t  active_knob = index; 
 		while (active_knob  >= NUM_KNOBS) {
 			active_knob = active_knob - NUM_KNOBS;
 			param = param + 1;
 		}
+		*/
+		
+		knob_param_pair indices = index_to_knob_param_pair(index);
         
-        		knob temp_knob;
+        knob temp_knob;
 		temp_knob.control_channel = 1;
-		temp_knob.control_number = 102 + index;
+		temp_knob.control_number = 102 + indices.knob_num;
 		temp_knob.control_value = 1;
 
-		params[active_knob] = temp_knob;
+		params[indices.knob_num] = temp_knob;
 		
-        switch(param) {
-			case 0: 
-				parameter.name = ("Channel" + String(active_knob));
+        switch(indices.param_num) {
+			case control_channel: 
+				parameter.name = ("Channel_" + String(indices.knob_num));
 	            parameter.hints |= kParameterIsInteger;
 	            parameter.ranges.min = 1;
 	            parameter.ranges.max = 16;
 	            parameter.ranges.def = 1;
 	            break;
-			case 1: 
-				parameter.name = ("CC_Number" + String(active_knob));
+			case control_number: 
+				parameter.name = ("CC_Number_" + String(indices.knob_num));
 	            parameter.hints |= kParameterIsInteger;
 	            parameter.ranges.min = 1;
 	            parameter.ranges.max = 127;
-	            parameter.ranges.def = 102 + active_knob;
+	            parameter.ranges.def = 102 + indices.knob_num;
 	            break;
-			case 2: 
-				parameter.name = ("CC_Value" + String(active_knob));
+			case control_value: 
+				parameter.name = ("CC_Value_" + String(indices.knob_num));
 	            parameter.hints |= kParameterIsInteger;
 	            parameter.ranges.min = 0;
 	            parameter.ranges.max = 127;
@@ -176,13 +186,13 @@ protected:
 			param = param + 1;
 		}
 		switch (param){
-			case 0:
+			case control_channel:
 				return params[active_knob].control_channel;
 				break;
-			case 1:
+			case control_number:
 				return params[active_knob].control_number;
 				break;
-			case 2:
+			case control_value:
 				return params[active_knob].control_value;
 				break;
 			}
@@ -198,13 +208,13 @@ protected:
 			param = param + 1;
 		}
 		switch (param){
-			case 0:
+			case control_channel:
 				params[active_knob].control_channel = value;
 				break;
-			case 1:
+			case control_number:
 				params[active_knob].control_number = value;
 				break;
-			case 2:
+			case control_value:
 				params[active_knob].control_value = value;
 				break;
 			}					
