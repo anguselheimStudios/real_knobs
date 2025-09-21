@@ -2,8 +2,6 @@
  * DISTRHO Plugin Framework (DPF)
  * Copyright (C) 2012-2024 Filipe Coelho <falktx@falktx.com>
  * 
- * 
- *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
  * permission notice appear in all copies.
@@ -18,7 +16,7 @@
  * Modified by Anguselheim Studios 2025
  */
 
-// ????
+
 
 #include "DistrhoPlugin.hpp"
 #include <string>
@@ -53,9 +51,8 @@ int8_t relative_to_signed(int8_t input_value) {
 class real_knobs : public Plugin {
 public:
     real_knobs()
-        : Plugin(3 * NUM_KNOBS, 0, 0) 
+        : Plugin(3 * NUM_KNOBS, 0, 0) {
 			
-			{
 			}
 
 protected:
@@ -95,7 +92,7 @@ protected:
         parameter.hints = kParameterIsAutomatable;
         
         uint32_t param = 0;
-		uint32_t  active_knob = index; // odd name due to conflict with name of struct
+		uint32_t  active_knob = index; 
 		while (active_knob  >= NUM_KNOBS) {
 			active_knob = active_knob - NUM_KNOBS;
 			param = param + 1;
@@ -107,7 +104,6 @@ protected:
 		temp_knob.control_value = 1;
 
 		params[active_knob] = temp_knob;
-		
 		
         switch(param) {
 			case 0: 
@@ -140,7 +136,7 @@ protected:
 		
     float getParameterValue(uint32_t index) const override {
        	uint32_t param = 0;
-		uint32_t  active_knob = index; // odd name due to conflict with name of struct
+		uint32_t  active_knob = index; 
 		while (active_knob  >= NUM_KNOBS) {
 			active_knob = active_knob - NUM_KNOBS;
 			param = param + 1;
@@ -162,7 +158,7 @@ protected:
 
      void setParameterValue(uint32_t index, float value) override {
 		uint32_t param = 0;
-		uint32_t  active_knob = index; // odd name due to conflict with name of struct
+		uint32_t  active_knob = index; 
 		while (active_knob  >= NUM_KNOBS) {
 			active_knob = active_knob - NUM_KNOBS;
 			param = param + 1;
@@ -210,7 +206,6 @@ protected:
 					// apply it to the cc value
 					params[k].control_value = params[k].control_value + relative_to_signed(value_in);
 					
-
 					if (params[k].control_value > 127) {
 						params[k].control_value = 127;
 					}
@@ -229,38 +224,31 @@ protected:
 					writeMidiEvent(event_out);
 					continue;
 				}
-				
-				// pass it through if it didn't get filtered
-				if (unused){
-					writeMidiEvent(midiEvents[i]);
-				}
-				
 
 			}
 
-
+			// pass it through if it didn't get filtered
+			if (unused){
+				writeMidiEvent(midiEvents[i]);
+			}
+			
 		}
 	
 	}
 	
-	
-
     // -------------------------------------------------------------------------------------------------------
 
 private:
 
 	knob params[NUM_KNOBS];
 	
-
-
     DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(real_knobs)
 };
 
 /* ------------------------------------------------------------------------------------------------------------
  * Plugin entry point, called by DPF to create a new plugin instance. */
 
-Plugin* createPlugin()
-{
+Plugin* createPlugin(){
     return new real_knobs();
 }
 
