@@ -25,32 +25,16 @@
 START_NAMESPACE_DISTRHO
 
 
-
-
+// Set the number of knobs here
 const uint8_t NUM_KNOBS = 8;
 
-struct knob{
-	uint8_t control_channel = 1;
-	uint8_t control_number = 7;
-	int16_t control_value = 0;
-};
 
-int8_t relative_to_signed(int8_t input_value) {
-	int8_t output_value = (int8_t) input_value;
-	if (output_value > 64){
-		output_value = -(128 - input_value);
-	}
-	else if (output_value == 64){
-		output_value = 0;
-	}
-	return output_value;
-}
 
 // -----------------------------------------------------------------------------------------------------------
 
-class real_knobs : public Plugin {
+class real_knobs_x8 : public Plugin {
 public:
-    real_knobs()
+    real_knobs_x8()
         : Plugin(3 * NUM_KNOBS, 0, 0) {
 			
 			}
@@ -60,7 +44,7 @@ protected:
     * Information */
 
     const char* getLabel() const override {
-        return "real_knobs _x8";
+        return "real_knobs_x8";
     }
 
     const char* getDescription() const override {
@@ -85,10 +69,60 @@ protected:
 
    /* --------------------------------------------------------------------------------------------------------
     * Init and Internal data */
+    
 
+	
+	//This is the data structure for each knob
+	struct knob{
+		uint8_t control_channel = 1;
+		uint8_t control_number = 7;
+		int16_t control_value = 0;
+	};
+	
+	/* knob_param_pair is used as a return value for 
+	 * index_to_knob_param_pair. 
+	 * 
+	 * knob_num is the index of the knob in params[].
+	 * param_num is the index of the parameter in the knob struct. 
+	 */
+	struct knob_param_pair {
+		uint8_t knob_num;
+		uint8_t param_num;
+	};
+	
+	/* This function converts the Akai MPK mini mkIII's relative 
+	 * encoder's output to a signed 8 bit intiger showing the ammount 
+	 * of change.
+	 */
+	int8_t relative_to_signed(int8_t input_value) {
+		int8_t output_value = (int8_t) input_value;
+		if (output_value > 64){
+			output_value = -(128 - input_value);
+		}
+		else if (output_value == 64){
+			output_value = 0;
+		}
+		return output_value;
+	}
+	
+	/* This function converts DPF's paramater index to a knob_param_pair 
+	 * struct giving you the index of the knob in params[] and the index
+	 * of the paramater in the switch statements associated 
+	 * knobs struct.
+	 */
+	knob_param_pair index_to_knob_param_pair(uint8_t index, uint8_t num_knobs = NUM_KNOBS) {
+		knob_param_pair result;
+		result.knob_num = index;
+		result.param_num = 0;
+		while (result.knob_num  >= num_knobs) {
+			result.knob_num = result.knob_num - num_knobs;
+			result.param_num++;
+		}
+		return result;
+	}
+	
 	void initParameter(uint32_t index, Parameter& parameter) override {
        
-
         parameter.hints = kParameterIsAutomatable;
         
         uint32_t param = 0;
@@ -242,14 +276,14 @@ private:
 
 	knob params[NUM_KNOBS];
 	
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(real_knobs)
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(real_knobs_x8)
 };
 
 /* ------------------------------------------------------------------------------------------------------------
  * Plugin entry point, called by DPF to create a new plugin instance. */
 
 Plugin* createPlugin(){
-    return new real_knobs();
+    return new real_knobs_x8();
 }
 
 // -----------------------------------------------------------------------------------------------------------
