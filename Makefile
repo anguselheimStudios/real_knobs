@@ -25,7 +25,6 @@ ifeq ($(HAVE_DGL),true)
 endif
 
 plugins: dgl
-#	$(MAKE) all -C plugins/real_knobs
 	$(MAKE) all -C plugins/real_knobs_x8
 	
 ifeq ($(CAN_GENERATE_TTL),true)

@@ -23,9 +23,13 @@ FILES_DSP = \
 include ../../DPF/Makefile.plugins.mk
 
 # --------------------------------------------------------------
-# Enable all possible plugin types
+# Enable plugin types 
+# Uncomment the corresponding line to create the desired plugin type. 
 
+#TARGETS += jack
 TARGETS += lv2_dsp
+#TARGETS += vst2
+#TARGETS += vst3
 
 all: $(TARGETS)
 

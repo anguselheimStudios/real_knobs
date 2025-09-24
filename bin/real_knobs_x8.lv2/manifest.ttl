@@ -1,0 +1,8 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://AnguselheimStudios.com/plugins/real_knobs_x8>
+    a lv2:Plugin ;
+    lv2:binary <real_knobs_x8_dsp.so> ;
+    rdfs:seeAlso <real_knobs_x8_dsp.ttl> .
+
